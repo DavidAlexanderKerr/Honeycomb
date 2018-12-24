@@ -99,6 +99,21 @@ namespace Honeycomb
             }
         }
 
+        public string Key
+        {
+            get
+            {
+                string cellKey = CellKey(Column, Row);
+                return cellKey;
+            }
+        }
+
+        public static string CellKey(int column, int row)
+        {
+            string cellKey = $"{column},{row}";
+            return cellKey;
+        }
+
         public Cell(T data, Honeycomb<T> honeycomb, int column, int row)
         {
             Data = data;

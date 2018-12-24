@@ -19,11 +19,35 @@ namespace Honeycomb
 
         public Cell<T> this[int column,int row] { get
             {
+                string key = Cell<T>.CellKey(column, row);
+
+                return this[key];
+            }
+        }
+
+        public Cell<T> this[string key]
+        {
+            get
+            {
                 Cell<T> cell = null;
-                string key = CellKey(column, row);
-                if (cellIndex.Keys.Contains(key)) cell= cellIndex[key];
+                try
+                {
+                    cell = cellIndex[key];
+                }
+                catch
+                {
+                    // ignore
+                }
+
                 return cell;
-            } }
+            }
+        }
+
+        public void ForEachCell(Action<Cell<T>> action)
+        {
+            foreach (Cell<T> cell in cells)
+                action(cell);
+        }
 
         public int Top { get
             {
@@ -136,16 +160,22 @@ namespace Honeycomb
         {
             StringBuilder output = new StringBuilder();
 
+            int maxWidth=cells.Max(c => c.Data.ToString().Length);
+
             for (int row = Top; row >= Bottom; row--)
             {
                 for (int col = Left; col <= Right; col++)
                 {
+                    string dataOutput = "-";
                     Cell<T> cell = this[col, row];
                     if (cell != null)
-                        output.Append(cell.Data.ToString());
+                        dataOutput = cell.Data.ToString();
                     else
-                        output.Append("-");
-                    output.Append("\t");
+                        dataOutput = new string('-', maxWidth);
+
+                    output.Append(dataOutput);
+                    string padding = new string(' ', maxWidth - dataOutput.Length + 1);
+                    output.Append(padding);
                 }
                 output.AppendLine();
             }
@@ -158,21 +188,8 @@ namespace Honeycomb
 
         private void AddCell(Cell<T> cell)
         {
-            string cellKey = CellKey(cell);
             cells.Add(cell);
-            cellIndex[cellKey] = cell;
-        }
-
-        private string CellKey(Cell<T> cell)
-        {
-            string cellKey = CellKey(cell.Column, cell.Row);
-            return cellKey;
-        }
-
-        private string CellKey(int column, int row)
-        {
-            string cellKey = $"{column},{row}";
-            return cellKey;
+            cellIndex[cell.Key] = cell;
         }
     }
 }

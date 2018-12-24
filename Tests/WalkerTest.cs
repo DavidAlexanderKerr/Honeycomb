@@ -15,10 +15,10 @@ namespace Tests
         public void TestWalk()
         {
             Honeycomb<long> honeycomb = CreateHex19();
-            var walker = new Walker(honeycomb);
             int steps = 4;
+            var walker = new Walker(honeycomb,steps);
 
-            walker.Walk(steps);
+            walker.Walk();
 
             SaveResults(walker.Honeycomb);
         }

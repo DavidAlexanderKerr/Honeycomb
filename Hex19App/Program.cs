@@ -15,7 +15,6 @@ namespace Hex19App
             Console.Write("Creating honeycomb ...");
             Honeycomb<long> honeycomb = CreateHex19();
             Console.WriteLine(" done.");
-            var walker = new Walker(honeycomb);
 
             int steps;
             Console.Write("How many steps? ");
@@ -29,13 +28,22 @@ namespace Hex19App
                 numEnetered = int.TryParse(userSteps, out steps);
             }
 
-            Console.Write($"Walking {steps} steps ...");
-            walker.Walk(steps);
+            Console.Write("Creating walker ...");
+            var walker = new Walker(honeycomb, steps);
+            walker.CacheingData += PrintCacheingMessage;
             Console.WriteLine(" done.");
+
+            Console.WriteLine($"Walking {steps} steps ...");
+            Cell<long> mostLikeley = walker.Walk();
+            Console.WriteLine(" done.");
+
+            Console.WriteLine($"Most likely destination: {mostLikeley.Key}");
+            Console.WriteLine($"Number of hits: {mostLikeley.Data}");
 
             Console.Write("Saving results ...");
             string filepath=SaveResults(walker.Honeycomb);
             Console.WriteLine($" saved in {filepath}.");
+            Console.ReadLine();
         }
 
         private static string SaveResults(Honeycomb<long> honeycomb)
@@ -196,6 +204,11 @@ namespace Hex19App
             bottoms[0] = tops[0];
 
             return bhc;
+        }
+
+        private static void PrintCacheingMessage(object sender,Walker.CacheingEventArgs cea)
+        {
+            Console.WriteLine(cea.Message);
         }
     }
 }
