@@ -59,6 +59,13 @@ namespace Honeycomb
             return mostLikely;
         }
 
+        public async Task<Cell<long>> WalkAsync()
+        {
+            Cell<long> mostLikely = await Task<Cell<long>>.Run(()=>Walk());
+
+            return mostLikely;
+        }
+
         private Dictionary<string, long> Step(Cell<long> position, int steps)
         {
             Dictionary<string, long> endPoints = nStepsFrom[position.Key][steps];
