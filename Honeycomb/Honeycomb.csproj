@@ -44,6 +44,7 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Honeycomb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadyHoneycombs.cs" />
     <Compile Include="Walker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
